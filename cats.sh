@@ -11,23 +11,28 @@ echo "### Check Java version"
 #sdk env install
 java -version
 
-echo "### Run Petclinic"
-./mvnw clean 
-./mvnw package -DskipTests
-java -jar -Dspring.profiles.active=default,jdbc ./target/spring-petclinic-rest-3.2.1.jar &
+echo "### Create fat jar Petclinic" 
+./mvnw clean package -DskipTests
+
+echo "### Run Petclinic" 
+java -jar -Dspring.profiles.active=hsqldb,jdbc ./target/spring-petclinic-rest-3.2.1.jar &
 sleep 60
 
-#echo "### Download OpenAPI from the application"
-#wget http://localhost:9966/petclinic/v3/api-docs -O ./cats/openapi.json
-
+#https://endava.github.io/cats/docs/commands-and-arguments/arguments
 #https://github.com/Endava/cats/releases
 wget https://github.com/Endava/cats/releases/download/cats-11.4.0/cats_uberjar_11.4.0.tar.gz -O ./cats/cats_uberjar_11.4.0.tar.gz
 tar -xf ./cats/cats_uberjar_11.4.0.tar.gz -C ./cats
 
-java -jar ./cats/cats.jar --contract=./src/main/resources/openapi.json --server=http://localhost:9966 --blackbox -o ./cats/cats-report/
+java -jar ./cats/cats.jar \
+--contract=./src/main/resources/openapi.yml \
+--server=http://localhost:9966 \
+--reportFormat=HTML_JS \
+-o ./cats/cats-report/
+#--mc 500 \
+#--printExecutionStatistics \
+#--blackbox
+#--basicauth=USR:PWD
 
-#sdk install java
-#sdk use java 20-tem
 jwebserver -p 9000 -d "$(pwd)/cats/cats-report/" & 
 
 sleep 120

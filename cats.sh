@@ -26,12 +26,13 @@ tar -xf ./cats/cats_uberjar_11.4.0.tar.gz -C ./cats
 java -jar ./cats/cats.jar \
 --contract=./src/main/resources/openapi.yml \
 --server=http://localhost:9966 \
+--basicauth=admin:admin \
 --reportFormat=HTML_JS \
--o ./cats/cats-report/
+--output=./cats/cats-report/
 #--mc 500 \
 #--printExecutionStatistics \
 #--blackbox
-#--basicauth=USR:PWD
+
 
 jwebserver -p 9000 -d "$(pwd)/cats/cats-report/" & 
 

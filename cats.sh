@@ -41,5 +41,3 @@ sleep 120
 rm -rf ./cats
 
 exit 0
-
-```
